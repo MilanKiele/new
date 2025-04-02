@@ -1,0 +1,134 @@
+// schema.prisma
+// Prisma Schema is to declare the data model of your application that Prisma Client uses to interact with your database.
+
+// Client
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Database
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User for Authentication
+model User {
+  id                    String                 @id @default(cuid())
+  name                  String                 
+  email                 String?                @unique // optional
+  emailVerified         DateTime?
+  image                 String? // not needed
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  refreshToken          String                 @default(uuid())
+  accounts              Account[]
+  hashedPassword        String? // needs to be optional: for example (Google)
+  isTwoFactorEnabled    Boolean                @default(false)
+  twoFactorConfirmation TwoFactorConfirmation?
+  profile               Profile?
+  emailChangeTokens     EmailChangeToken[]
+}
+
+// OAuth Provider
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+// Email Verification
+model VerificationToken {
+  id String @id @default(cuid())
+
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+// Password Reset
+model PasswordResetToken {
+  id String @id @default(cuid())
+
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+// 2FA Token
+model TwoFactorToken {
+  id String @id @default(cuid())
+
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+// Two Factor Authentication
+model TwoFactorConfirmation {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId])
+}
+
+// Delete User Token
+model DeleteToken {
+  id String @id @default(cuid())
+
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+// Email Change Token
+model EmailChangeToken {
+  id           String   @id @default(cuid())
+
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+
+  email        String
+  newEmail     String
+  token        String   @unique
+  confirmedAt  DateTime?
+  expires      DateTime
+
+  @@unique([email, token])
+}
+
+
+// Public Profile
+model Profile {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  username  String?  @unique
+  bio       String?
+  location  String?
+  birthDate DateTime?
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

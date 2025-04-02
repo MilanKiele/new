@@ -42,14 +42,13 @@ html {
 /* ________________________________________________ Main Components */
 
 body {
-  color: var(--foreground);
   background-color: var(--background);
+  color: var(--foreground);
   padding: 0;
   margin: 0;
   width: 100%;
   height: 100%;
   font-family: "Inter", sans-serif;
-  font-smoothing: antialiased;
 }
 
 main {

@@ -1,26 +1,185 @@
+/*
+File: globals.css
+Description: Improved main CSS configuration
+*/
+
 @import "tailwindcss";
 
+/* ________________________________________________ Root */
+
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f4f5f7;
+  --foreground: #1a1a1a;
+
+  --primary: #111827;
+  --primary-unselected: #6b7280;
+  --primary-selected: #2563eb;
+
+  --secondary: #374151;
+  --secondary-unselected: #9ca3af;
+  --secondary-selected: #2563eb;
+
+  --color-header: #0f172a;
+
+  --border: #d1d5db;
+  --input: #1f2937;
+  --radius: 8px;
+
+  --popover: #ffffff;
+  --popover-foreground: #1f2937;
+
+  --card: #ffffff;
+  --card-foreground: #374151;
+
+  --muted: #f3f4f6;
+  --muted-foreground: #6b7280;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ________________________________________________ Main Components */
+
+body {
+  color: var(--foreground);
+  background-color: var(--background);
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  font-family: "Inter", sans-serif;
+  font-smoothing: antialiased;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+main {
+  width: 100%;
+  min-height: 80vh;
+}
+
+/* ________________________________________________ Selection Styles */
+
+::selection {
+  background-color: var(--primary-selected);
+  color: white;
+}
+
+.selection-underline {
+  color: var(--primary-unselected);
+  transition: color 0.3s ease;
+}
+
+.selection-underline:hover {
+  color: var(--primary-selected);
+  text-decoration: underline;
+}
+
+.primary-selection {
+  color: var(--primary-unselected);
+  transition: color 0.3s ease;
+}
+
+.primary-selection:hover {
+  color: var(--primary-selected);
+}
+
+/* ________________________________________________ Scrollbar Styles */
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(156, 163, 175, 0.3);
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(107, 114, 128, 0.4);
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+}
+
+/* ________________________________________________ Typography */
+
+.text {
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.75rem;
+  color: var(--primary);
+}
+
+.text-low {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--muted-foreground);
+}
+
+.headertext {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--color-header);
+  padding-top: 1rem;
+  line-height: 1.2;
+}
+
+/* ________________________________________________ Responsive Layout */
+
+.canvas-desktop {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .canvas-desktop {
+    display: block;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.canvas-mobile {
+  display: block;
+}
+
+@media (min-width: 1024px) {
+  .canvas-mobile {
+    display: none;
+  }
+}
+
+/* ________________________________________________ Container System */
+
+.container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1rem;
+}
+
+.contx {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.conty {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+@media (min-width: 1024px) {
+  .contx {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
 }

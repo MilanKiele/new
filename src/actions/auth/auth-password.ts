@@ -12,11 +12,10 @@ import {
   NewPasswordSchemaData,
 } from "@/schemas/auth/auth-schemas";
 import prisma from "@/lib/prisma";
-import { User } from "@prisma/client"; // if you're using Prisma
 
 export const changePassword = async (
   values: NewPasswordSchemaData,
-  user: User
+  userId: string
 ) => {
   const validateFields = NewPasswordSchema.safeParse(values);
   if (!validateFields.success) {
@@ -27,7 +26,7 @@ export const changePassword = async (
   const hashedPassword = await bcrypt.hash(password, 10);
 
   await prisma.user.update({
-    where: { id: user.id },
+    where: { id: userId },
     data: { hashedPassword: hashedPassword, refreshToken: uuidv4() },
   });
 

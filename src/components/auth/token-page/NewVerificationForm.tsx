@@ -41,6 +41,7 @@ const NewVerificationForm = () => {
         redirect(`/auth/settings`);
       }
     } catch (error) {
+      console.log(error);
       setError("An error occurred");
     } finally {
       setIsSubmitting(false);

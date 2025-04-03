@@ -28,7 +28,7 @@ export async function sendEmail(
   email: string,
   subject: string,
   content: string
-): Promise<any> {
+): Promise<ReturnType<Resend["emails"]["send"]>> {
   try {
     const emailContent = emailTemplate({
       content: content,
@@ -50,10 +50,15 @@ export async function sendEmail(
 
     console.log("E-Mail sent successfully:", response);
     return response;
-  } catch (error) {
+  } catch (error: unknown) {
+    const err = error as { response?: { data?: unknown } } | Error;
     console.error(
       "Error sending E-Mail:",
-      (error as any).response?.data || (error as Error).message
+      "response" in err && err.response?.data
+        ? err.response.data
+        : err instanceof Error
+          ? err.message
+          : "Unknown error"
     );
     throw new Error("E-Mail could not be sent");
   }

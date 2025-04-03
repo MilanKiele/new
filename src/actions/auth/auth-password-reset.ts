@@ -28,8 +28,6 @@ export const newPassword = async (
     return { error: validateFields.error.message };
   }
 
-  const { password } = validateFields.data;
-
   const existingToken = await getPasswordResetTokenByToken(token);
 
   if (!existingToken) {
@@ -48,7 +46,7 @@ export const newPassword = async (
     return { error: "User not found!" };
   }
 
-  const pw = await changePassword(values, existingUser);
+  const pw = await changePassword(values, existingUser.id);
 
   if (!pw.success) {
     return { error: pw.error };

@@ -4,13 +4,14 @@ Description: describes a form field.
 */
 
 import React from "react";
+import type { FieldError, UseFormRegisterReturn } from "react-hook-form";
 
 interface FormFieldProps {
   label: string;
   type: string;
   placeholder?: string;
-  register: any;
-  error?: any;
+  register: UseFormRegisterReturn;
+  error?: FieldError;
   disabled?: boolean;
 }
 

@@ -29,11 +29,11 @@ export const loginUser = async (values: LoginSchemaData) => {
     return { error: "Invalid input" };
   }
 
-  let { email, password, code } = validateFields.data;
+  const { email, password, code } = validateFields.data;
 
   // Set lower case email
-  email = email.toLowerCase();
-  const existingUser = await getUserByEmail(email);
+  const lowerMail = email.toLowerCase();
+  const existingUser = await getUserByEmail(lowerMail);
 
   if (!existingUser || !existingUser.email) {
     return { error: "Email does not exist" };

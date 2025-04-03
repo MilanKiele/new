@@ -13,10 +13,11 @@ import {
   authRoutes,
   publicRoutes,
 } from "@/routes";
+import { NextResponse } from "next/server";
 
 const { auth } = NextAuth(authConfig);
 
-export default auth((req): any => {
+export default auth((req): NextResponse => {
   // Check for authentication
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
@@ -28,17 +29,17 @@ export default auth((req): any => {
 
   // Check if the route is an authentication route
   if (isApiAuthRoute) {
-    return null;
+    return NextResponse.next();
   }
 
   // Check if the route is an authentication route
   if (isAuthRoute) {
     // If user is logged in, redirect to default login redirect URL
     if (isLoggedIn) {
-      return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+      return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
     }
     // If user is not logged in, continue processing the route
-    return null;
+    return NextResponse.next();
   }
 
   // If user is not logged in and route is not public or authentication route, redirect to login
@@ -48,13 +49,13 @@ export default auth((req): any => {
       callbackUrl += nextUrl.search;
     }
     const encodedCallbackUrl = encodeURIComponent(callbackUrl);
-    return Response.redirect(
+    return NextResponse.redirect(
       new URL(`/auth/login?callbackUrl=${encodedCallbackUrl}`, nextUrl)
     );
   }
 
-  // Return null for other cases
-  return null;
+  // return NextResponse.next(); for other cases
+  return NextResponse.next();
 });
 
 // Optionally, don't invoke Middleware on some paths

@@ -17,11 +17,6 @@ interface VerifyEmailData {
   confirmEmail: string;
 }
 
-interface FormMessageProps {
-  message?: string;
-  type?: "success" | "error" | "info";
-}
-
 export default function VerifyEmailChangeForm() {
   const params = useSearchParams();
   const router = useRouter();
@@ -55,7 +50,7 @@ export default function VerifyEmailChangeForm() {
         if (result.success) {
           setTimeout(() => router.push("/dashboard"), 2000);
         }
-      } catch (error) {
+      } catch {
         setMessage("An unexpected error occurred.");
       } finally {
         setIsSubmitting(false);

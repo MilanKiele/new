@@ -23,14 +23,14 @@ export const registerUser = async (values: RegisterSchemaData) => {
     return { error: "Invalid input" };
   }
 
-  let { email, password } = validateField.data;
+  const { email, password } = validateField.data;
 
   // Data processing
-  email = email.toLowerCase();
+  const lowerEmail = email.toLowerCase();
   const hashedPassword = await bcrypt.hash(password, 10);
 
   // Prisma POST
-  const existingUser = await getUserByEmail(email);
+  const existingUser = await getUserByEmail(lowerEmail);
 
   if (existingUser) {
     return { error: "User already exists" };
@@ -38,9 +38,9 @@ export const registerUser = async (values: RegisterSchemaData) => {
 
   await prisma.user.create({
     data: {
-      email,
+      email: lowerEmail,
       hashedPassword: hashedPassword,
-      name: email.split("@")[0],
+      name: lowerEmail.split("@")[0],
     },
   });
 

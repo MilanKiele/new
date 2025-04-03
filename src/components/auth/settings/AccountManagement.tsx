@@ -19,7 +19,7 @@ const AccountManagement = async () => {
       <div className="space-y-6">
         <h2 className="text-xl font-semibold">Account Settings</h2>
         <ChangeEmailForm currentEmail={email ?? null} />
-        <ChangePasswordForm user={session?.user} />
+        <ChangePasswordForm />
         <Toggle2FAButton
           initialStatus={session?.user.isTwoFactorEnabled || false}
         />

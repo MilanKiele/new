@@ -8,10 +8,8 @@ Description: Styled Sign Out button with logout icon.
 import useSessionUpdater from "@/hooks/auth/auth-update";
 import { LogOutIcon } from "lucide-react";
 import { signOut } from "next-auth/react";
-import { useRouter } from "next/navigation";
 
 const SignOutButton = () => {
-  const router = useRouter();
   const updateSession = useSessionUpdater();
 
   const handleSignOut = async () => {

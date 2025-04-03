@@ -64,6 +64,7 @@ const NewPasswordForm = () => {
         setError(result?.error || "");
         setSuccess(result?.success || "");
       } catch (error) {
+        console.log(error);
         setError("An error occurred");
       } finally {
         setIsSubmitting(false);

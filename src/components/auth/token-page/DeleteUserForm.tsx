@@ -5,7 +5,7 @@ Description: Form component to verify and confirm user account deletion, with re
 
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 
@@ -56,6 +56,7 @@ const DeleteUserForm = () => {
           setTimeout(() => router.push("/"), 2000);
         }
       } catch (error) {
+        console.log(error);
         setError("An unexpected error occurred");
       } finally {
         setIsSubmitting(false);

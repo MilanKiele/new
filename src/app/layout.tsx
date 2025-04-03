@@ -4,19 +4,11 @@ Description: This is the root layout for the application.
 */
 
 import type { Metadata, Viewport } from "next";
-import { Roboto } from "next/font/google";
 import AuthProvider from "@/context/AuthProvider";
 import Navbar from "@/components/base/Navbar";
 import Footer from "@/components/base/Footer";
 import { Creator, Description, Keywords, WebName } from "@/constants";
 import "./globals.css";
-
-// Font Inter
-const roboto = Roboto({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "700", "900"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: WebName,
@@ -40,14 +32,14 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={roboto.className}>
-      <AuthProvider>
-        <body>
+    <html lang="en">
+      <body>
+        <AuthProvider>
           <Navbar />
           {children}
           <Footer />
-        </body>
-      </AuthProvider>
+        </AuthProvider>
+      </body>
     </html>
   );
 }

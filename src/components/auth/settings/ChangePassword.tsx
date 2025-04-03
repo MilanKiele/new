@@ -1,11 +1,6 @@
-/*
-File: ChangePasswordForm.tsx
-Description: Form component to change current password.
-*/
-
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import FormField from "@/components/ui/form-template/FormField";
 import FormMessage from "@/components/ui/form-template/FormMessage";
@@ -13,16 +8,19 @@ import { changePassword } from "@/actions/auth/auth-password";
 import { NewPasswordSchemaData } from "@/schemas/auth/auth-schemas";
 import { EditIcon, XIcon } from "lucide-react";
 import useSessionUpdater from "@/hooks/auth/auth-update";
+import { auth } from "@/auth";
+import type { User } from "next-auth"; // falls nicht vorhanden, evtl. eigenes Typing
 
 type MessageType = "success" | "error" | "";
 
-const ChangePasswordForm = ({ user }: { user: any }) => {
+const ChangePasswordForm = () => {
   const [message, setMessage] = useState<{ type: MessageType; text: string }>({
     type: "",
     text: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
 
   const updateSession = useSessionUpdater();
 
@@ -31,14 +29,32 @@ const ChangePasswordForm = ({ user }: { user: any }) => {
     handleSubmit,
     formState: { errors },
     reset,
-    watch,
   } = useForm<NewPasswordSchemaData>();
 
+  // Load session on mount
+  useEffect(() => {
+    const loadSession = async () => {
+      const session = await auth();
+      setUser(session?.user ?? null);
+    };
+    loadSession();
+  }, []);
+
   const onSubmit = async (data: NewPasswordSchemaData) => {
+    if (!user) {
+      setMessage({ type: "error", text: "User not authenticated." });
+      return;
+    }
+
     setIsLoading(true);
     setMessage({ type: "", text: "" });
 
-    const result = await changePassword(data, user);
+    if (!user.id) {
+      setMessage({ type: "error", text: "User ID is missing." });
+      setIsLoading(false);
+      return;
+    }
+    const result = await changePassword(data, user.id);
 
     if (result.error) {
       setMessage({ type: "error", text: result.error });
@@ -49,7 +65,7 @@ const ChangePasswordForm = ({ user }: { user: any }) => {
       });
       reset();
       setIsEditing(false);
-      updateSession(); // Optional: reflect session updates
+      updateSession();
     }
 
     setIsLoading(false);

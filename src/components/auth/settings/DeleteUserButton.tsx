@@ -6,7 +6,6 @@ Description: Button component to trigger account deletion email using form compo
 "use client";
 
 import { useState } from "react";
-import FormWrapper from "@/components/ui/form-template/FormWrapper";
 import FormMessage from "@/components/ui/form-template/FormMessage";
 import { useForm } from "react-hook-form";
 import { deleteMail } from "@/actions/auth/auth-delete-mail";

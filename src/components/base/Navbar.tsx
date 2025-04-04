@@ -74,7 +74,7 @@ const Navbar = () => {
               </Link>
             ) : (
               <Link
-                href="/auth/signin"
+                href="/auth/login"
                 onClick={() => setOpen(false)}
                 className="text-black border border-black font-semibold hover:bg-black hover:text-white py-2 px-4 rounded-md transition w-fit"
               >
@@ -135,7 +135,7 @@ const Navbar = () => {
                 </Link>
               ) : (
                 <Link
-                  href="/auth/signin"
+                  href="/auth/login"
                   onClick={() => setOpen(false)}
                   className="text-black font-[500] hover:bg-black/10 py-3 px-8 rounded-lg transition w-full text-center block"
                 >

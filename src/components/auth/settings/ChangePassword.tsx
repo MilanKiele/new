@@ -4,16 +4,17 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import FormField from "@/components/ui/form-template/FormField";
 import FormMessage from "@/components/ui/form-template/FormMessage";
-import { changePassword } from "@/actions/auth/auth-password";
 import { NewPasswordSchemaData } from "@/schemas/auth/auth-schemas";
 import { EditIcon, XIcon } from "lucide-react";
 import useSessionUpdater from "@/hooks/auth/auth-update";
-import { auth } from "@/auth";
-import type { User } from "next-auth"; // falls nicht vorhanden, evtl. eigenes Typing
+import type { User } from "next-auth";
+import { getSession } from "next-auth/react";
+import { changePasswordWithSession } from "@/actions/auth/auth-password-change";
 
 type MessageType = "success" | "error" | "";
 
 const ChangePasswordForm = () => {
+  const session = getSession();
   const [message, setMessage] = useState<{ type: MessageType; text: string }>({
     type: "",
     text: "",
@@ -34,11 +35,11 @@ const ChangePasswordForm = () => {
   // Load session on mount
   useEffect(() => {
     const loadSession = async () => {
-      const session = await auth();
-      setUser(session?.user ?? null);
+      const sessionData = await session;
+      setUser(sessionData?.user ?? null);
     };
     loadSession();
-  }, []);
+  }, [session]);
 
   const onSubmit = async (data: NewPasswordSchemaData) => {
     if (!user) {
@@ -54,7 +55,7 @@ const ChangePasswordForm = () => {
       setIsLoading(false);
       return;
     }
-    const result = await changePassword(data, user.id);
+    const result = await changePasswordWithSession(data);
 
     if (result.error) {
       setMessage({ type: "error", text: result.error });
